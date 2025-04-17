@@ -1,4 +1,5 @@
 package com.inovare.entregas.service.strategy;
 
-public class FreteStrategy {
+public interface FreteStrategy {
+double calcularFrete(double peso);
 }
