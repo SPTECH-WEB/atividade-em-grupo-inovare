@@ -2,6 +2,7 @@ package com.inovare.entregas.service;
 
 import com.inovare.entregas.model.Pedido;
 import com.inovare.entregas.repository.PedidoRepository;
+import com.inovare.entregas.service.adapter.TransportadoraAdapter;
 import com.inovare.entregas.service.strategy.FreteEconomico;
 import com.inovare.entregas.service.strategy.FreteExpresso;
 import com.inovare.entregas.service.strategy.FreteGratis;
@@ -37,6 +38,9 @@ public class PedidoService {
                 break;
             case "gratis":
                 freteStrategy = new FreteGratis();
+                break;
+            case "transportadora":
+                freteStrategy = new TransportadoraAdapter();
                 break;
             default:
                 throw new IllegalArgumentException("Tipo de frete inválido");
