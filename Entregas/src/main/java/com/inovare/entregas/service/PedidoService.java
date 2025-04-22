@@ -3,6 +3,7 @@ package com.inovare.entregas.service;
 import com.inovare.entregas.model.Pedido;
 import com.inovare.entregas.repository.PedidoRepository;
 import com.inovare.entregas.service.adapter.TransportadoraAdapter;
+import com.inovare.entregas.service.observer.PedidoObserver;
 import com.inovare.entregas.service.strategy.FreteEconomico;
 import com.inovare.entregas.service.strategy.FreteExpresso;
 import com.inovare.entregas.service.strategy.FreteGratis;
@@ -18,7 +19,10 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    private PedidoObserver pedidoObserver;
+
     public Pedido salvarPedido(Pedido pedido) {
+        pedidoObserver.notificar(pedido);
         return pedidoRepository.save(pedido);
     }
 
@@ -28,6 +32,7 @@ public class PedidoService {
 
     public double calcularFrete(double peso, String tipoFrete) {
         FreteStrategy freteStrategy;
+
 
         switch (tipoFrete.toLowerCase()) {
             case "economico":
