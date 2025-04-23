@@ -11,6 +11,7 @@ import com.inovare.entregas.service.strategy.FreteStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,10 +20,16 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    private PedidoObserver pedidoObserver;
+    @Autowired
+    private List<PedidoObserver> pedidoObservers;
+    public void notificarTodos(Pedido pedido) {
+        for (PedidoObserver observer : pedidoObservers) {
+            observer.notificar(pedido);
+        }
+    }
 
     public Pedido salvarPedido(Pedido pedido) {
-        pedidoObserver.notificar(pedido);
+        notificarTodos(pedido);
         return pedidoRepository.save(pedido);
     }
 
@@ -32,7 +39,6 @@ public class PedidoService {
 
     public double calcularFrete(double peso, String tipoFrete) {
         FreteStrategy freteStrategy;
-
 
         switch (tipoFrete.toLowerCase()) {
             case "economico":
